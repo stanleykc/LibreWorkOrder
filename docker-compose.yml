@@ -1,0 +1,60 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: libre-workorder-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: libre_work_order
+      MYSQL_USER: workorder
+      MYSQL_PASSWORD: workorder123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./database/sample_data.sql:/docker-entrypoint-initdb.d/02-sample-data.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - workorder-network
+
+  backend:
+    build: ./backend
+    container_name: libre-workorder-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_USERNAME: workorder
+      DB_PASSWORD: workorder123
+      DATASOURCES_DEFAULT_URL: jdbc:mysql://mysql:3306/libre_work_order?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    ports:
+      - "8080:8080"
+    networks:
+      - workorder-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  frontend:
+    build: ./frontend
+    container_name: libre-workorder-frontend
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080
+    networks:
+      - workorder-network
+
+volumes:
+  mysql_data:
+
+networks:
+  workorder-network:
+    driver: bridge

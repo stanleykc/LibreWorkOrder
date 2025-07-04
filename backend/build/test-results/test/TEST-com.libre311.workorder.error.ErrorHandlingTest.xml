@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.libre311.workorder.error.ErrorHandlingTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2025-07-04T18:09:16" hostname="MacBookPro.attlocal.net" time="0.0">
+  <properties/>
+  <testcase name="initializationError" classname="com.libre311.workorder.error.ErrorHandlingTest" time="0.0">
+    <failure message="io.micronaut.context.exceptions.BeanInstantiationException: Bean definition [io.micronaut.logging.PropertiesLoggingLevelsConfigurer] could not be loaded: Error instantiating bean of type  [io.micronaut.logging.PropertiesLoggingLevelsConfigurer]&#10;&#10;Message: Resource logback.xml not found&#10;Path Taken: new PropertiesLoggingLevelsConfigurer(Environment environment,List loggingSystems)" type="io.micronaut.context.exceptions.BeanInstantiationException">io.micronaut.context.exceptions.BeanInstantiationException: Bean definition [io.micronaut.logging.PropertiesLoggingLevelsConfigurer] could not be loaded: Error instantiating bean of type  [io.micronaut.logging.PropertiesLoggingLevelsConfigurer]
+
+Message: Resource logback.xml not found
+Path Taken: new PropertiesLoggingLevelsConfigurer(Environment environment,List loggingSystems)
+	at app//io.micronaut.context.DefaultBeanContext.initializeContext(DefaultBeanContext.java:1980)
+	at app//io.micronaut.context.DefaultApplicationContext.initializeContext(DefaultApplicationContext.java:291)
+	at app//io.micronaut.context.DefaultBeanContext.readAllBeanDefinitionClasses(DefaultBeanContext.java:3322)
+	at app//io.micronaut.context.DefaultBeanContext.finalizeConfiguration(DefaultBeanContext.java:3677)
+	at app//io.micronaut.context.DefaultBeanContext.start(DefaultBeanContext.java:361)
+	at app//io.micronaut.context.DefaultApplicationContext.start(DefaultApplicationContext.java:199)
+	at app//io.micronaut.test.extensions.AbstractMicronautExtension.startApplicationContext(AbstractMicronautExtension.java:502)
+	at app//io.micronaut.test.extensions.AbstractMicronautExtension.beforeClass(AbstractMicronautExtension.java:341)
+	at app//io.micronaut.test.extensions.junit5.MicronautJunit5Extension.beforeAll(MicronautJunit5Extension.java:84)
+	at java.base@23.0.2/java.util.ArrayList.forEach(ArrayList.java:1597)
+Caused by: io.micronaut.context.exceptions.BeanInstantiationException: Error instantiating bean of type  [io.micronaut.logging.PropertiesLoggingLevelsConfigurer]
+
+Message: Resource logback.xml not found
+Path Taken: new PropertiesLoggingLevelsConfigurer(Environment environment,List loggingSystems)
+	at app//io.micronaut.context.DefaultBeanContext.resolveByBeanFactory(DefaultBeanContext.java:2324)
+	at app//io.micronaut.context.DefaultBeanContext.doCreateBean(DefaultBeanContext.java:2279)
+	at app//io.micronaut.context.DefaultBeanContext.doCreateBean(DefaultBeanContext.java:2291)
+	at app//io.micronaut.context.DefaultBeanContext.createRegistration(DefaultBeanContext.java:3054)
+	at app//io.micronaut.context.SingletonScope.getOrCreate(SingletonScope.java:80)
+	at app//io.micronaut.context.DefaultBeanContext.findOrCreateSingletonBeanRegistration(DefaultBeanContext.java:2956)
+	at app//io.micronaut.context.DefaultBeanContext.initializeEagerBean(DefaultBeanContext.java:2676)
+	at app//io.micronaut.context.DefaultBeanContext.initializeContext(DefaultBeanContext.java:1974)
+	... 9 more
+Caused by: io.micronaut.logging.LoggingSystemException: Resource logback.xml not found
+	at app//io.micronaut.logging.impl.LogbackUtils.configure(LogbackUtils.java:109)
+	at app//io.micronaut.logging.impl.LogbackUtils.configure(LogbackUtils.java:56)
+	at app//io.micronaut.logging.impl.LogbackLoggingSystem.refresh(LogbackLoggingSystem.java:71)
+	at java.base@23.0.2/java.util.ArrayList.forEach(ArrayList.java:1597)
+	at app//io.micronaut.logging.PropertiesLoggingLevelsConfigurer.initLogging(PropertiesLoggingLevelsConfigurer.java:84)
+	at app//io.micronaut.logging.PropertiesLoggingLevelsConfigurer.&lt;init&gt;(PropertiesLoggingLevelsConfigurer.java:68)
+	at app//io.micronaut.logging.$PropertiesLoggingLevelsConfigurer$Definition.instantiate(Unknown Source)
+	at app//io.micronaut.context.DefaultBeanContext.resolveByBeanFactory(DefaultBeanContext.java:2309)
+	... 16 more
+</failure>
+  </testcase>
+  <system-out><![CDATA[Hibernate: 
+    drop table if exists work_orders
+Hibernate: 
+    create table work_orders (
+        created_at datetime(6) not null,
+        id bigint not null auto_increment,
+        updated_at datetime(6),
+        title varchar(500) not null,
+        assigned_to varchar(255),
+        description TEXT,
+        libre311_service_request_id varchar(255) not null,
+        priority enum ('HIGH','LOW','MEDIUM','URGENT') not null,
+        status enum ('ASSIGNED','CANCELLED','COMPLETED','IN_PROGRESS','PENDING') not null,
+        primary key (id)
+    ) engine=InnoDB
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
